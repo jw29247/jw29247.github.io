@@ -1,0 +1,7 @@
+.month-selector {
+  width: 100%;
+}
+
+.month-selector input[type='month'] {
+  min-width: 0;
+}
