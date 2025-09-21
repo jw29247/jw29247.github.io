@@ -1,0 +1,9 @@
+.panel__header .month-selector {
+  min-width: 180px;
+}
+
+@media (max-width: 640px) {
+  .panel__header .month-selector {
+    width: 100%;
+  }
+}

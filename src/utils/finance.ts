@@ -70,15 +70,26 @@ export function totalWeddingSavings(plan: WeddingPlan): number {
   return plan.currentSavings + contributionsTotal;
 }
 
+export function totalWeddingBudget(plan: WeddingPlan): number {
+  return (plan.budgetItems ?? []).reduce((total, item) => total + (item.quoted || 0), 0);
+}
+
+export function totalWeddingPaid(plan: WeddingPlan): number {
+  return (plan.budgetItems ?? []).reduce((total, item) => total + (item.paid || 0), 0);
+}
+
+export function totalWeddingOutstanding(plan: WeddingPlan): number {
+  return Math.max(totalWeddingBudget(plan) - totalWeddingPaid(plan), 0);
+}
+
 export function projectedMonthlySavingsNeed(plan: WeddingPlan, referenceDate = new Date()): number {
-  const totalSaved = totalWeddingSavings(plan);
-  const remaining = Math.max(plan.targetAmount - totalSaved, 0);
+  const remainingBalance = Math.max(totalWeddingOutstanding(plan) - totalWeddingSavings(plan), 0);
   const monthsRemaining = monthsUntilWedding(plan, referenceDate);
   if (monthsRemaining <= 0) {
-    return remaining;
+    return remainingBalance;
   }
 
-  return remaining / monthsRemaining;
+  return remainingBalance / monthsRemaining;
 }
 
 export function calculateNetByMonth(incomes: Income[], expenses: Expense[]): Record<string, number> {
@@ -107,4 +118,55 @@ export function sortMonthKeys(months: string[]): string[] {
   return [...months].sort(
     (a, b) => new Date(`${a}-01`).getTime() - new Date(`${b}-01`).getTime(),
   );
+}
+
+function parseMonthKey(month: string): { year: number; month: number } {
+  const [yearString, monthString] = month.split('-');
+  const year = Number.parseInt(yearString, 10);
+  const monthIndex = Number.parseInt(monthString, 10) - 1;
+  if (!Number.isFinite(year) || !Number.isFinite(monthIndex)) {
+    throw new Error(`Invalid month key: ${month}`);
+  }
+  return { year, month: monthIndex };
+}
+
+export function addMonthsToMonthKey(month: string, offset: number): string {
+  const { year, month: monthIndex } = parseMonthKey(month);
+  const base = new Date(year, monthIndex + offset, 1);
+  const y = base.getFullYear();
+  const m = String(base.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+export function generateSequentialMonths(startMonth: string, count: number): string[] {
+  return Array.from({ length: count }, (_, index) => addMonthsToMonthKey(startMonth, index));
+}
+
+function compareMonthKeys(a: string, b: string): number {
+  return new Date(`${a}-01`).getTime() - new Date(`${b}-01`).getTime();
+}
+
+export function projectMonthlyTotalsWithRecurring<T extends { month: string; amount: number }>(
+  records: T[],
+  months: string[],
+  isRecurring: (record: T) => boolean,
+): Record<string, number> {
+  const totals: Record<string, number> = Object.fromEntries(months.map((month) => [month, 0]));
+
+  records.forEach((record) => {
+    if (isRecurring(record)) {
+      months.forEach((month) => {
+        if (compareMonthKeys(month, record.month) >= 0) {
+          totals[month] += record.amount;
+        }
+      });
+      return;
+    }
+
+    if (totals[record.month] !== undefined) {
+      totals[record.month] += record.amount;
+    }
+  });
+
+  return totals;
 }

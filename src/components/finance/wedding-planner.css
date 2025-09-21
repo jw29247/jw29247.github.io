@@ -1,0 +1,83 @@
+.budget-metrics {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.metric {
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.metric__label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.metric__value {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.metric--positive .metric__value {
+  color: #047857;
+}
+
+.metric--negative .metric__value {
+  color: #b91c1c;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.grid-budget {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.grid-contribution .actions,
+.grid-budget .actions {
+  justify-content: flex-end;
+}
+
+.budget-table input[type='text'],
+.budget-table input[type='number'] {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  background-color: #f8fafc;
+}
+
+.budget-table input[type='text']:focus,
+.budget-table input[type='number']:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.18);
+  background-color: #fff;
+}
+
+@media (max-width: 640px) {
+  .grid-contribution,
+  .grid-budget {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}

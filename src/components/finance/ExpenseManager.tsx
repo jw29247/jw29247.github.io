@@ -26,6 +26,7 @@ export function ExpenseManager({ month, onMonthChange, expenses, onAddExpense, o
     description: '',
     amount: '',
     category: EXPENSE_CATEGORIES[0] as ExpenseCategory,
+    recursMonthly: false,
   });
 
   const filtered = useMemo(() => expenses.filter((expense) => expense.month === month), [expenses, month]);
@@ -42,9 +43,10 @@ export function ExpenseManager({ month, onMonthChange, expenses, onAddExpense, o
       description: formState.description.trim() || 'Expense',
       amount,
       category: formState.category,
+      recursMonthly: formState.recursMonthly,
     });
 
-    setFormState({ description: '', amount: '', category: formState.category });
+    setFormState({ description: '', amount: '', category: formState.category, recursMonthly: formState.recursMonthly });
   };
 
   return (
@@ -95,6 +97,14 @@ export function ExpenseManager({ month, onMonthChange, expenses, onAddExpense, o
               ))}
             </select>
           </label>
+          <label className="field inline">
+            <input
+              type="checkbox"
+              checked={formState.recursMonthly}
+              onChange={(event) => setFormState((prev) => ({ ...prev, recursMonthly: event.target.checked }))}
+            />
+            <span>Repeats monthly</span>
+          </label>
         </div>
         <div className="actions align-end">
           <button type="submit" className="button primary">
@@ -108,7 +118,7 @@ export function ExpenseManager({ month, onMonthChange, expenses, onAddExpense, o
         records={filtered.map((expense) => ({
           id: expense.id,
           primary: expense.description,
-          secondary: expense.category,
+          secondary: expense.recursMonthly ? `${expense.category} · Monthly` : expense.category,
           amount: expense.amount,
         }))}
         onRemove={onRemoveExpense}

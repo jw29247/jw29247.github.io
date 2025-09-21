@@ -1,0 +1,72 @@
+.wedding-progress__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.wedding-progress__ring {
+  align-self: center;
+  width: min(220px, 60vw);
+}
+
+.wedding-progress__ring svg {
+  width: 100%;
+  height: auto;
+}
+
+.wedding-progress__ring-track {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.35);
+  stroke-width: 12;
+}
+
+.wedding-progress__ring-indicator {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.wedding-progress__percent {
+  fill: #1f2937;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wedding-progress__stats {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.wedding-progress__stats dt {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.wedding-progress__stats dd {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+@media (min-width: 768px) {
+  .wedding-progress__body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wedding-progress__ring {
+    flex: 0 0 220px;
+  }
+
+  .wedding-progress__stats {
+    flex: 1;
+  }
+}

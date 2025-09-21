@@ -40,6 +40,10 @@ describe('finance utilities', () => {
         { id: 'c1', date: '2024-02-14', amount: 1200, note: 'Bonus' },
         { id: 'c2', date: '2024-04-10', amount: 800, note: 'Gift' },
       ],
+      budgetItems: [
+        { id: 'b1', description: 'Venue', quoted: 15000, paid: 2000 },
+        { id: 'b2', description: 'Photographer', quoted: 4000, paid: 500 },
+      ],
     };
 
     expect(totalWeddingSavings(plan)).toBe(7000);

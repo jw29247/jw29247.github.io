@@ -22,6 +22,14 @@ export interface Expense {
   description: string;
   amount: number;
   category: ExpenseCategory;
+  recursMonthly?: boolean;
+}
+
+export interface WeddingBudgetItem {
+  id: string;
+  description: string;
+  quoted: number;
+  paid: number;
 }
 
 export interface WeddingContribution {
@@ -36,6 +44,7 @@ export interface WeddingPlan {
   targetAmount: number;
   currentSavings: number;
   contributions: WeddingContribution[];
+  budgetItems: WeddingBudgetItem[];
 }
 
 export interface FinanceState {
